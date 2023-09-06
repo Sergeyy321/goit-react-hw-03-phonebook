@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Input } from './FIlter.styled';
+import { Input} from './FIlter.styled';
 
 export class Filter extends Component {
 
