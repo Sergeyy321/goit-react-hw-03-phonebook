@@ -14,19 +14,20 @@ export class App extends Component {
     ],
     filter: '',
   };
+
   componentDidMount() {
     const savedContacts = localStorage.getItem('contacts');
     if (savedContacts !== null) {
       const contacts = JSON.parse(savedContacts);
-    this.setState({contacts})
+      this.setState({ contacts });
     }
-}
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.contacts !== this.state.contacts) {
       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
-}
+  }
 
   onDelete = contactId => {
     this.setState(prev => ({
@@ -54,28 +55,25 @@ export class App extends Component {
       }));
     }
   };
+  getFilteredContacts() {
+    const normalizedValue = this.state.filter.toLowerCase.trim();
+    return this.state.contacts.filter(contact => {
+      return contact.name.toLowerCase().includes(normalizedValue);
+    });
+  }
 
   render() {
-    const { contacts, filter } = this.state;
-   
+    const { filter } = this.state;
 
-    const lowercaseName = filter.toLowerCase();
-    const contactsEl =
-      this.state.filter !== ''
-        ? contacts.filter(contacts =>
-            contacts.name.toLowerCase().includes(lowercaseName)
-          )
-        : [];
     return (
       <ContactStyled>
         <Phonebook onSubmit={this.onAddContact} />
         <div>
-            <h2>Contacts</h2>
+          <h2>Contacts</h2>
           <Filter filter={filter} onfilterChange={this.onfilterChange} />
           <Contacts
-            contacts={contactsEl}
+            contacts={this.getFilteredContacts()}
             onDelete={this.onDelete}
-            filteredName={filter}
           />
         </div>
       </ContactStyled>
